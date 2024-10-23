@@ -228,5 +228,29 @@
         <p>&copy; 2024 WeShare. All rights reserved.</p>
     </footer>
 
+    <script>
+        function checkFileStatus() {
+            const ip = '{{ receiver_ip }}';
+            const url = `http://${ip}:5000/local/send/status`;
+
+            fetch(url)
+                .then(response => {
+                    if (response.status === 200) {
+                        console.log('File is available');
+                        window.location.href = '/uploads';
+                    } else {
+                        console.log('File not available yet, retrying in 5 seconds');
+                        setTimeout(checkFileStatus, 5000);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking file status:', error);
+                    setTimeout(checkFileStatus, 5000);
+                });
+        }
+
+        // Start checking for file status
+        checkFileStatus();
+    </script>
 </body>
 </html>
